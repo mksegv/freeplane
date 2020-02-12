@@ -45,8 +45,12 @@ class FNodeModel extends NodeModel {
 		super(map);
 		this.file = file;
 		directoryFiles = null;
-		final String[] children = file.list();
-		setFolded(children != null && children.length > 0);
+		try {
+			final String[] children = file.getCanonicalFile().list();
+			setFolded(children != null && children.length > 0);
+		} catch (final IOException ioe) {
+			setFolded(false);
+		}
 	}
 
 	public FNodeModel(final File[] directoryFiles, final MapModel map) {
@@ -65,7 +69,7 @@ class FNodeModel extends NodeModel {
 	private void initializeChildNodes() {
 		if (super.getChildrenInternal().isEmpty() && hasChildren()) {
 			try {
-				final File[] files = file != null ? file.listFiles() : directoryFiles;
+				final File[] files = file != null ? file.getCanonicalFile().listFiles() : directoryFiles;
 				if (files != null) {
 					int childCount = 0;
 					for (File childFile : files) {
@@ -81,6 +85,8 @@ class FNodeModel extends NodeModel {
 				}
 			}
 			catch (final SecurityException se) {
+			}
+			catch (final IOException ioe) {
 			}
 		}
 	}
