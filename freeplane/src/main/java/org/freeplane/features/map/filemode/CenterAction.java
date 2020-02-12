@@ -36,6 +36,11 @@ public class CenterAction extends AFreeplaneAction {
 		super("CenterAction");
 	}
 
+	@Override
+	public void setEnabled(final boolean pEnabled) {
+		super.setEnabled(true);
+	}
+
 	public void actionPerformed(final ActionEvent e) {
 		final NodeModel selectedNode = Controller.getCurrentModeController().getMapController().getSelectedNode();
 		if (selectedNode != null && ! selectedNode.isRoot()) {
